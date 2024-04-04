@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="celconv">
+  <xacro:include filename="$(find celconv_description)/urdf/celconv_cell.urdf.xacro"/>
+
+  <!-- Define the number of rows and columns as input --> 
+  <xacro:property name="num_rows" value="$(arg num_rows)"/>
+  <xacro:property name="num_cols" value="$(arg num_cols)"/>
+
+
+  <xacro:property name="dist_bias" value="0.005"/>
+  <xacro:property name="row_dist" value="${dist_bias + 0.1}"/>
+  <xacro:property name="col_dist" value="${dist_bias + 0.11547 * 3}"/>
+  <xacro:property name="row" value="0"/>
+  <xacro:property name="col" value="0"/>
+
+  <!-- Define a macro to handle cell creation and joint connection -->
+  <xacro:macro name="create_cells" params="row col num_rows num_cols">
+    <!-- Base case: if row >= num_rows, stop the recursion -->
+    <xacro:if value="${row >= num_rows}">
+      <!-- Recursion stops -->
+    </xacro:if>
+
+    <!-- Continue if more rows are to be processed -->
+    <xacro:if value="${row &lt; num_rows}">
+      <!-- Calculate y position -->
+      <xacro:property name="y" value="${row * row_dist}"/>
+      
+      <!-- Handle cells in the current row -->
+      <xacro:if value="${col &lt; num_cols}">
+        <xacro:property name="cell_index" value="${row * num_cols + col}"/>
+        <xacro:celconv_cell name="cell_${cell_index}"/>
+        <joint name="joint_${cell_index}" type="fixed">
+          <parent link="base_link"/>
+          <child link="cell_${cell_index}_link"/>
+          <!-- Adjust origin based on row parity and column position -->
+          <origin xyz="${col * col_dist + (row % 2) * (col_dist / 2)} ${y} 0"/>
+        </joint>
+        <!-- Recurse for the next column -->
+        <xacro:create_cells row="${row}" col="${col + 1}" num_rows="${num_rows}" num_cols="${num_cols}"/>
+      </xacro:if>
+
+      <!-- Move to the next row after finishing the current row's columns -->
+      <xacro:if value="${col == num_cols}">
+        <xacro:create_cells row="${row + 1}" col="0" num_rows="${num_rows}" num_cols="${num_cols}"/>
+      </xacro:if>
+    </xacro:if>
+  </xacro:macro>
+
+  <!-- Start the cell creation process -->
+  <xacro:create_cells row="${row}" col="${col}" num_rows="${num_rows}" num_cols="${num_cols}"/>
+
+  <link name="base_link"></link>
+
+  <joint name="base_to_cell_0_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="cell_0_link"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+</robot>

@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find celconv_description)/urdf/celconv_rim.urdf.xacro"/>
+
+  <xacro:macro name="celconv_cell" params="name">
+    <link name="${name}_link">
+
+      <inertial>
+        <mass value="0.07862944645"/>
+        <inertia
+          ixx="0"
+          ixy="0"
+          ixz="0"
+          iyy="0"
+          iyz="0"
+          izz="0"/>
+      </inertial>
+
+      <visual>
+        <geometry>
+          <mesh filename="file://$(find celconv_description)/mesh/celconv_base.stl"/>
+        </geometry>
+        <material name="base_material">
+          <color rgba="1 1 1 1"/>
+        </material>
+      </visual>
+      
+      <collision>
+        <geometry>
+          <mesh filename="file://$(find celconv_description)/mesh/celconv_base.stl"/>
+        </geometry>
+      </collision>
+      
+    </link>
+
+    <xacro:celconv_rim
+		  name="left"
+		  color="0.3 0 0"
+		  xyz="-0.03464101615 0.02 0.2"
+		  rpy="1.570796326794896 0 1.047197551196597"/>
+
+  </xacro:macro>
+</robot>
