@@ -13,6 +13,8 @@
   <xacro:property name="row" value="0"/>
   <xacro:property name="col" value="0"/>
 
+  <link name="base_link"></link>
+
   <!-- Define a macro to handle cell creation and joint connection -->
   <xacro:macro name="create_cells" params="row col num_rows num_cols">
     <!-- Base case: if row >= num_rows, stop the recursion -->
@@ -28,13 +30,12 @@
       <!-- Handle cells in the current row -->
       <xacro:if value="${col &lt; num_cols}">
         <xacro:property name="cell_index" value="${row * num_cols + col}"/>
-        <xacro:celconv_cell name="cell_${cell_index}"/>
-        <joint name="joint_${cell_index}" type="fixed">
-          <parent link="base_link"/>
-          <child link="cell_${cell_index}_link"/>
-          <!-- Adjust origin based on row parity and column position -->
-          <origin xyz="${col * col_dist + (row % 2) * (col_dist / 2)} ${y} 0"/>
-        </joint>
+        <xacro:celconv_cell name="${cell_index}" 
+                            parent_name="base"
+                            color="1 1 1"
+                            xyz="${col * col_dist + (row % 2) * (col_dist / 2)} ${y} 0"
+                            rpy="0 0 0"/>
+
         <!-- Recurse for the next column -->
         <xacro:create_cells row="${row}" col="${col + 1}" num_rows="${num_rows}" num_cols="${num_cols}"/>
       </xacro:if>
@@ -48,13 +49,5 @@
 
   <!-- Start the cell creation process -->
   <xacro:create_cells row="${row}" col="${col}" num_rows="${num_rows}" num_cols="${num_cols}"/>
-
-  <link name="base_link"></link>
-
-  <joint name="base_to_cell_0_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="cell_0_link"/>
-    <origin xyz="0 0 0"/>
-  </joint>
 
 </robot>

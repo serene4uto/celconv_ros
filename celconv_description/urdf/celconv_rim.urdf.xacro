@@ -1,8 +1,10 @@
 <?xml version="1.0" ?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="celconv_rim"  params="name color xyz rpy">  
-  	<link name="rim_${name}_link">
+  <xacro:include filename="$(find celconv_description)/urdf/celconv_roller.urdf.xacro"/>
+
+  <xacro:macro name="celconv_rim"  params="name parent_name color xyz rpy">  
+  	<link name="rim_${name}_${parent_name}_link">
 
   	  <inertial>
   	  	<origin xyz="0 0 -0.000343"/>
@@ -20,7 +22,7 @@
   	  	<geometry>  
   	  		<mesh filename="file://$(find celconv_description)/mesh/celconv_rim.stl"/>
   	  	</geometry>
-  	  	<material name="rim_${name}_material">
+  	  	<material name="rim_${name}_${parent_name}_material">
   	  		<color rgba="${color} 1"/>
   	  	</material>
   	  </visual>
@@ -33,13 +35,62 @@
   		
   	</link>  
   	<joint
-  	  name="rim_${name}_joint"
+  	  name="rim_${name}_to_${parent_name}_joint"
   	  type="continuous">  
-  	  <parent link="${name}_link" />
-  	  <child link="rim_${name}_link" />
+  	  <parent link="${parent_name}_link" />
+  	  <child link="rim_${name}_${parent_name}_link" />
   	  <axis xyz="0 0 1"/>
   	  <origin xyz="${xyz}" rpy="${rpy}"/>  
   	</joint>
+
+  	<xacro:celconv_roller
+  	  parent_name="rim_${name}_${parent_name}"
+  	  name="e"
+  	  xyz="0.01355 0 0.0055"
+  	  rpy="-1.570796326794896 0 0"
+  	/>
+  	<xacro:celconv_roller
+  	  parent_name="rim_${name}_${parent_name}"
+  	  name="ne"
+  	  xyz="0.00958129689 0.00958129689 -0.0055"
+  	  rpy="-1.570796326794896 0 0.7853981633974483"
+  	/>
+  	<xacro:celconv_roller
+  	  parent_name="rim_${name}_${parent_name}"
+  	  name="n"
+  	  xyz="0 0.01355 0.0055"
+  	  rpy="-1.570796326794896 0 1.570796326794896"
+  	/>
+  	<xacro:celconv_roller
+  	  parent_name="rim_${name}_${parent_name}"
+  	  name="nw"
+  	  xyz="-0.00958129689 0.00958129689 -0.0055"
+  	  rpy="-1.570796326794896 0 2.356194490192345"
+  	/>
+  	<xacro:celconv_roller
+  	  parent_name="rim_${name}_${parent_name}"
+  	  name="w"
+  	  xyz="-0.01355 0 0.0055"
+  	  rpy="-1.570796326794896 0 3.141592653589793"
+  	/>
+  	<xacro:celconv_roller
+  	  parent_name="rim_${name}_${parent_name}"
+  	  name="sw"
+  	  xyz="-0.00958129689 -0.00958129689 -0.0055"
+  	  rpy="-1.570796326794896 0 -2.356194490192345"
+  	/>
+  	<xacro:celconv_roller
+  	  parent_name="rim_${name}_${parent_name}"
+  	  name="s"
+  	  xyz="0 -0.01355 0.0055"
+  	  rpy="-1.570796326794896 0 -1.570796326794896"
+  	/>
+  	<xacro:celconv_roller
+  	  parent_name="rim_${name}_${parent_name}"
+  	  name="se"
+  	  xyz="0.00958129689 -0.00958129689 -0.0055"
+  	  rpy="-1.570796326794896 0 -0.7853981633974483"
+  	/>
   	  
   </xacro:macro>
 
