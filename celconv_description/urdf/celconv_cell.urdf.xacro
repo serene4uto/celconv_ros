@@ -50,7 +50,7 @@
 		  xyz="-0.0671 0.03875 0.095"
 		  rpy="1.570796326794896 0 1.047197551196597"/>
 
-	  <!-- <xacro:celconv_rim
+	  <xacro:celconv_rim
 	  	name="back"
       parent_name="cell_${name}_${parent_name}"
 	  	color="0 0.3 0"
@@ -62,7 +62,7 @@
       parent_name="cell_${name}_${parent_name}"
 	  	color="0 0 0.3"
 	  	xyz="0.0671 0.03875 0.095"
-	  	rpy="1.570796326794896 0 -1.047197551196597"/> -->
+	  	rpy="1.570796326794896 0 -1.047197551196597"/>
 
   </xacro:macro>
 </robot>
