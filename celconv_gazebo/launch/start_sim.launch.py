@@ -3,9 +3,17 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
 
 def generate_launch_description():
 
+    declare_num_rows = DeclareLaunchArgument('num_rows', default_value='1', description='Number of rows in the cell grid')
+    declare_num_cols = DeclareLaunchArgument('num_cols', default_value='1', description='Number of columns in the cell grid')
+
+    num_rows = LaunchConfiguration('num_rows')
+    num_cols = LaunchConfiguration('num_cols')
+    
     gazebo_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
@@ -19,7 +27,6 @@ def generate_launch_description():
             'verbose': 'true',
             'paused': 'true',
             'gui': 'true',
-            'physics': 'dart',
         }.items()
     )
 
@@ -35,11 +42,13 @@ def generate_launch_description():
             'namespace': 'celconv',
             'use_sim_time': 'True',
             'num_rows': '5',
-            'num_cols': '5',
+            'num_cols': '2',
         }.items()
     )
 
     ld = LaunchDescription()
+    ld.add_action(declare_num_rows)
+    ld.add_action(declare_num_cols)
     ld.add_action(gazebo_launch)
     ld.add_action(celconv_spawn_node)
 

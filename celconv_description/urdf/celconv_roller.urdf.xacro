@@ -25,6 +25,14 @@
   	</visual>
 
   	<collision>
+	  <!-- <surface>
+	    <friction>
+	      <ode>
+	        <mu>0.5</mu>
+	        <mu2>0.5</mu2>
+	      </ode>
+	    </friction>
+	  </surface> -->
   	  <geometry>
   	  	<mesh filename="file://$(find celconv_description)/mesh/celconv_roller.stl"/>
   	  </geometry>
