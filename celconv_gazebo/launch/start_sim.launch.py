@@ -41,8 +41,8 @@ def generate_launch_description():
         launch_arguments={
             'namespace': 'celconv',
             'use_sim_time': 'True',
-            'num_rows': '5',
-            'num_cols': '2',
+            'num_rows': num_rows,
+            'num_cols': num_cols,
         }.items()
     )
 
