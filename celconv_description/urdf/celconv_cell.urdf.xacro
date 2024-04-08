@@ -64,5 +64,27 @@
 	  	xyz="0.0671 0.03875 0.095"
 	  	rpy="1.570796326794896 0 -1.047197551196597"/>
 
+
+  	<!-- <ros2_control name="cell_${name}_${parent_name}_GazeboSystem" type="system">
+  	  <hardware>
+  	    <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+  	  </hardware>
+	    <joint name="rim_left_to_${name}_${parent_name}_joint">
+        	<command_interface name="velocity"/>
+        	<state_interface name="position"/>
+        	<state_interface name="velocity"/>
+	    </joint>
+	    <joint name="rim_back_to_${name}_${parent_name}_joint">
+        	<command_interface name="velocity"/>
+        	<state_interface name="position"/>
+        	<state_interface name="velocity"/>
+	    </joint>
+	    <joint name="rim_right_to_${name}_${parent_name}_joint">
+        	<command_interface name="velocity"/>
+        	<state_interface name="position"/>
+        	<state_interface name="velocity"/>
+	    </joint>
+  	</ros2_control> -->
+
   </xacro:macro>
 </robot>
