@@ -5,6 +5,7 @@
   <!-- Define the number of rows and columns as input --> 
   <!-- <xacro:arg name="num_rows" default="2"/>
   <xacro:arg name="num_cols" default="2"/> -->
+  <xacro:arg name="control_cfg_prefix" default="celconv"/>
   <xacro:property name="num_rows" value="$(arg num_rows)"/>
   <xacro:property name="num_cols" value="$(arg num_cols)"/>
 
@@ -28,7 +29,9 @@
     <!-- Continue if more rows are to be processed -->
     <xacro:if value="${row &lt; num_rows}">
       <!-- Calculate y position -->
-      <xacro:property name="y" value="${row * row_dist + (col % 2) * (row_dist / 2)}"/>
+      <xacro:property name="y" value="${row * row_dist - (col % 2) * (row_dist / 2)}"/>
+      <xacro:property name="x" value="${col * col_dist}"/>
+      <xacro:property name="z" value="0"/>
       
       <!-- Handle cells in the current row -->
       <xacro:if value="${col &lt; num_cols}">
@@ -36,7 +39,7 @@
         <xacro:celconv_cell name="${cell_index}" 
                             parent_name="base"
                             color="1 1 1"
-                            xyz="${col * col_dist} ${y} 0"
+                            xyz="${x} ${y} ${z}"
                             rpy="0 0 0"/>
 
         <!-- Recurse for the next column -->
@@ -54,32 +57,11 @@
   <xacro:create_cells row="${row}" col="${col}" num_rows="${num_rows}" num_cols="${num_cols}"/>
 
 
-  <!-- <ros2_control name="cell_0_base_GazeboSystem" type="system">
-    <hardware>
-      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
-    </hardware>
-	  <joint name="rim_left_to_0_base_joint">
-      	<command_interface name="velocity"/>
-      	<state_interface name="position"/>
-      	<state_interface name="velocity"/>
-	  </joint>
-	  <joint name="rim_back_to_0_base_joint">
-      	<command_interface name="velocity"/>
-      	<state_interface name="position"/>
-      	<state_interface name="velocity"/>
-	  </joint>
-	  <joint name="rim_right_to_0_base_joint">
-      	<command_interface name="velocity"/>
-      	<state_interface name="position"/>
-      	<state_interface name="velocity"/>
-	  </joint>
-  </ros2_control>
-
 
   <gazebo>
     <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
-      <parameters>$(find celconv_control)/config/celconv_gazebo_controller_velocity.yaml</parameters>
+      <parameters>$(find celconv_control)/config/$(arg control_cfg_prefix)_gazebo_control.yaml</parameters>
     </plugin>
-  </gazebo> -->
+  </gazebo>
 
 </robot>

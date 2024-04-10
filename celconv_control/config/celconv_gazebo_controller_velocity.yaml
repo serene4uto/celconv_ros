@@ -1,6 +1,7 @@
 controller_manager:
   ros__parameters:
     update_rate: 100  # Hz
+    robot_description: /robot_description
 
     velocity_controller:
       type: velocity_controllers/JointGroupVelocityController
