@@ -5,18 +5,18 @@ from launch.event_handlers import OnProcessExit
 
 def generate_launch_description():
     # Declare the prefix argument
-    declare_prefix = DeclareLaunchArgument(
-        'prefix', default_value='celconv', description='Prefix of the celconv'
+    declare_namespace = DeclareLaunchArgument(
+        'namespace', default_value='', description='Namespace of the celconv'
     )
 
     # Use the prefix in controller names
-    prefix = LaunchConfiguration('prefix')
+    name_space = LaunchConfiguration('namespace')
 
     # Define the command to load and activate the joint_state_broadcaster
     load_joint_state_broadcaster = ExecuteProcess(
         cmd=[
             'ros2', 'control', 'load_controller', '--set-state', 'active',
-            Command(['echo ', prefix, '_joint_state_broadcaster'])
+            Command(['echo ', '-c ', name_space, '/controller_manager', ' ' ,'celconv_joint_state_broadcaster'])
         ],
         output='screen',
         shell=True  # Ensure that the command is executed in a shell environment
@@ -26,7 +26,7 @@ def generate_launch_description():
     load_joint_trajectory_controller = ExecuteProcess(
         cmd=[
             'ros2', 'control', 'load_controller', '--set-state', 'active',
-            Command(['echo ', prefix, '_velocity_controller'])
+            Command(['echo ', '-c ', name_space, '/controller_manager', ' ', 'celconv_velocity_controller'])
         ],
         output='screen',
         shell=True  # Ensure that the command is executed in a shell environment
@@ -36,7 +36,7 @@ def generate_launch_description():
     ld = LaunchDescription()
 
     # Add declared arguments and actions to the LaunchDescription
-    ld.add_action(declare_prefix)
+    ld.add_action(declare_namespace)
     ld.add_action(load_joint_state_broadcaster)
 
     # Use OnProcessExit to chain the loading of controllers sequentially

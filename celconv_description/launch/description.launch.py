@@ -11,8 +11,8 @@ def generate_launch_description():
 
     # Declare launch arguments
     declare_celconv_namespace = DeclareLaunchArgument('namespace', default_value='', description='Namespace of the celconv')
-    declare_use_sim_time = DeclareLaunchArgument('use_sim_time', default_value='False', description='Use simulation (Gazebo) clock if true')
-    declare_pub_joint_states = DeclareLaunchArgument('pub_joint_states', default_value='True', description='Publish joint states')
+    declare_use_sim_time = DeclareLaunchArgument('use_sim_time', default_value='false', description='Use simulation (Gazebo) clock if true')
+    declare_pub_joint_states = DeclareLaunchArgument('pub_joint_states', default_value='true', description='Publish joint states')
     declare_num_rows = DeclareLaunchArgument('num_rows', default_value='1', description='Number of rows in the cell grid')
     declare_num_cols = DeclareLaunchArgument('num_cols', default_value='1', description='Number of columns in the cell grid')
 
@@ -37,7 +37,9 @@ def generate_launch_description():
             ' ',
             'num_cols:=', num_cols,
             ' ',
-            'control_cfg_prefix:=', celconv_namespace
+            'is_sim:=', use_sim_time,
+            ' ',
+            'prefix:=', celconv_namespace,
         ]),
         value_type=str
     )

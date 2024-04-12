@@ -1,15 +1,11 @@
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
+from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, ExecuteProcess, RegisterEventHandler
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, PythonExpression
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, FindExecutable
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.actions import Node
+from launch.event_handlers import OnProcessExit, OnIncludeLaunchDescription
 
-from launch.substitutions import FindExecutable, Command
-from launch_ros.parameter_descriptions import ParameterValue
-from launch.actions import ExecuteProcess
-from launch.conditions import IfCondition
-from launch.conditions import UnlessCondition
 
 
 def generate_launch_description():
@@ -42,7 +38,7 @@ def generate_launch_description():
         ),
         launch_arguments={
             'namespace': celconv_namespace,
-            'use_sim_time': 'True',
+            'use_sim_time': 'true',
             'num_rows': num_rows,
             'num_cols': num_cols
         }.items()
@@ -57,6 +53,30 @@ def generate_launch_description():
                    '-x', x, '-y', y, '-z', z, '-timeout', '30']
     )
 
+    celcon_control_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([
+                FindPackageShare('celconv_control'), 
+                'launch', 
+                'gazebo_control.launch.py'
+            ])
+        ),
+        launch_arguments={
+            'namespace': celconv_namespace
+        }.items()
+    )
+
+    gen_control_config_process = ExecuteProcess(
+        cmd=[
+            PathJoinSubstitution([FindExecutable(name='python3')]),
+            PathJoinSubstitution([FindPackageShare('celconv_gazebo'), 'script', 'gazebo_controller_config.py']),
+            celconv_namespace,
+            num_rows,
+            num_cols
+        ],
+        output='screen'
+    )
+
     # Assemble the Launch Description
     ld = LaunchDescription()
     ld.add_action(declare_namespace)
@@ -65,8 +85,27 @@ def generate_launch_description():
     ld.add_action(declare_z)
     ld.add_action(declare_num_rows)
     ld.add_action(declare_num_cols)
-    ld.add_action(celconv_description_launch)
-    ld.add_action(spawn_celconv_node)
+    ld.add_action(gen_control_config_process)
+
+    ld.add_action(
+        RegisterEventHandler(
+            OnProcessExit(
+                target_action=gen_control_config_process,
+                on_exit=[celconv_description_launch, spawn_celconv_node, celcon_control_launch],
+            )
+        )
+    )
+
+    # ld.add_action(
+    #     RegisterEventHandler(
+    #         OnIncludeLaunchDescription(
+    #             target_action=celconv_description_launch,
+    #             on_exit=[, ],
+    #         )
+    #     )
+    # )
+
+    
 
 
     return ld

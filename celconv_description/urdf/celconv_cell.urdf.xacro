@@ -3,11 +3,11 @@
 
   <xacro:include filename="$(find celconv_description)/urdf/celconv_rim.urdf.xacro"/>
 
-  <xacro:macro name="celconv_cell" params="name parent_name color xyz rpy">
+  <xacro:macro name="celconv_cell" params="name parent_name color xyz rpy is_sim">
     <link name="cell_${name}_${parent_name}_link">
 
       <inertial>
-        <mass value="0.07862944645"/>
+        <mass value="1"/>
         <inertia
           ixx="0"
           ixy="0"
@@ -67,7 +67,9 @@
 
   	<ros2_control name="cell_${name}_${parent_name}_hardware" type="system">
   	  <hardware>
-  	    <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+	  	<xacro:if value="${is_sim}">
+  	    	<plugin>gazebo_ros2_control/GazeboSystem</plugin>
+		</xacro:if>
   	  </hardware>
 	    <joint name="rim_left_to_cell_${name}_${parent_name}_joint">
         	<command_interface name="velocity"/>

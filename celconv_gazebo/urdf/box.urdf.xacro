@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="small_box">
+
+  <!-- Define the dimensions as Xacro properties -->
+  <xacro:property name="height" value="0.23094"/>
+  <xacro:property name="width" value="0.23094"/>
+  <xacro:property name="depth" value="0.11547"/> <!-- Assuming depth is the same as width for simplicity -->
+
+  <!-- Link for the box -->
+  <link name="box_link">
+    <visual>
+      <geometry>
+        <box size="${width} ${height} ${depth}"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${width} ${height} ${depth}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.05"/> <!-- Assuming some mass for the box -->
+      <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1"/>
+    </inertial>
+  </link>
+
+</robot>

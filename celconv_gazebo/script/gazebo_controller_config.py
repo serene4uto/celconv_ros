@@ -4,7 +4,7 @@ import yaml
 
 if __name__ == '__main__':
     parser = ArgumentParser()
-    parser.add_argument('prefix', type=str, default='celconv')
+    parser.add_argument('prefix', type=str, default='')
     parser.add_argument('num_rows', type=int, default=1)
     parser.add_argument('num_cols', type=int, default=1)
     args = parser.parse_args()
@@ -20,24 +20,23 @@ if __name__ == '__main__':
             joint_list.append(f'rim_back_to_cell_{r*num_cols + c}_base_joint')
             joint_list.append(f'rim_right_to_cell_{r*num_cols + c}_base_joint')
 
-    if prefix == '':
-        prefix = 'celconv'
+
     save_config_file = get_package_share_directory('celconv_control') + f'/config/{prefix}_gazebo_control.yaml'
 
     control_config = {
         'controller_manager': {
             'ros__parameters': {
                 'update_rate': int(20),
-                f'{prefix}_velocity_controller': {
+                f'celconv_velocity_controller': {
                     'type': 'velocity_controllers/JointGroupVelocityController',
                 },
 
-                f'{prefix}_joint_state_broadcaster': {
+                f'celconv_joint_state_broadcaster': {
                     'type': 'joint_state_broadcaster/JointStateBroadcaster',
                 },
             }
         },
-        f'{prefix}_velocity_controller': {
+        f'celconv_velocity_controller': {
             'ros__parameters': {
                 'joints': joint_list
             }
