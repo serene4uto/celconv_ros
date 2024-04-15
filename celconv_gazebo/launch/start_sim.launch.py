@@ -26,10 +26,11 @@ def generate_launch_description():
             ])
         ),
         launch_arguments={
-            'world': PathJoinSubstitution([FindPackageShare('gazebo_ros'), 'worlds', 'empty.world']),
+            'world': PathJoinSubstitution([FindPackageShare('celconv_gazebo'), 'worlds', 'empty.world']),
             'verbose': 'true',
             'paused': 'true',
             'gui': 'true',
+            # 'physics': 'ode',
         }.items()
     )
 

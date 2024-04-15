@@ -7,7 +7,7 @@
     <link name="cell_${name}_${parent_name}_link">
 
       <inertial>
-        <mass value="1"/>
+        <mass value="2.0"/>
         <inertia
           ixx="0"
           ixy="0"

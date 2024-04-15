@@ -10,12 +10,22 @@ from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
 
+    declare_box_name = DeclareLaunchArgument(name='box_name', default_value='example_box', description='Name of the box to spawn')
+    declare_x = DeclareLaunchArgument(name='x', default_value='0.173205', description='X position of the box')
+    declare_y = DeclareLaunchArgument(name='y', default_value='-0.1', description='Y position of the box')
+    declare_z = DeclareLaunchArgument(name='z', default_value='0.2', description='Z position of the box')
+
+    box_name = LaunchConfiguration('box_name')
+    x = LaunchConfiguration('x')
+    y = LaunchConfiguration('y')
+    z = LaunchConfiguration('z')
+
     urdf_box_process = ExecuteProcess(
         cmd=[
             'xacro ' + 
             get_package_share_directory('celconv_gazebo') + '/urdf/box.urdf.xacro' +
             ' > ' + 
-            get_package_share_directory('celconv_gazebo') + '/urdf/example_box.urdf'
+            get_package_share_directory('celconv_gazebo') + '/urdf/box.urdf'
         ],
         output='screen',
         shell=True
@@ -24,13 +34,17 @@ def generate_launch_description():
     spawn_box_node = Node(
         package='gazebo_ros',
         executable='spawn_entity.py',
-        arguments=['-entity', 'example_box', 
-                   '-file', get_package_share_directory('celconv_gazebo') + '/urdf/example_box.urdf',
-                   '-x', '0.173205', '-y', '-0.1', '-z', '0.2', '-timeout', '30']
+        arguments=['-entity', box_name, 
+                   '-file', get_package_share_directory('celconv_gazebo') + '/urdf/box.urdf',
+                   '-x', x, '-y', y, '-z', z, '-timeout', '30']
     )
 
     ld = LaunchDescription()
 
+    ld.add_action(declare_box_name)
+    ld.add_action(declare_x)
+    ld.add_action(declare_y)
+    ld.add_action(declare_z)
     ld.add_action(urdf_box_process)  # Ensure this action is added to launch description
 
     ld.add_action(
