@@ -47,21 +47,21 @@
 		  name="left"
       parent_name="cell_${name}_${parent_name}"
 		  color="0.3 0 0"
-		  xyz="-0.0671 0.03875 0.095"
+		  xyz="-0.03507 0.02025 0.095"
 		  rpy="1.570796326794896 0 1.047197551196597"/>
 
 	  <xacro:celconv_rim
 	  	name="back"
       parent_name="cell_${name}_${parent_name}"
 	  	color="0 0.3 0"
-	  	xyz="0 -0.0775 0.095"
+	  	xyz="0 -0.0405 0.095"
 	  	rpy="1.570796326794896 0 3.141592653589793"/>
 
 	  <xacro:celconv_rim
 	  	name="right"
       parent_name="cell_${name}_${parent_name}"
 	  	color="0 0 0.3"
-	  	xyz="0.0671 0.03875 0.095"
+	  	xyz="0.03507 0.02025 0.095"
 	  	rpy="1.570796326794896 0 -1.047197551196597"/>
 
 

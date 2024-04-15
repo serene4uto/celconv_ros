@@ -15,9 +15,9 @@
   <xacro:property name="num_cols" value="$(arg num_cols)"/>
 
   <!-- Define the distance between cells -->
-  <xacro:property name="dist_bias" value="0.005"/>
-  <xacro:property name="row_dist" value="${dist_bias + 0.2}"/>
-  <xacro:property name="col_dist" value="${dist_bias + 0.11547 * 1.5}"/>
+  <xacro:property name="dist_bias" value="0.000"/>
+  <xacro:property name="row_dist" value="${dist_bias + 0.12}"/>
+  <xacro:property name="col_dist" value="${dist_bias + 0.06928 * 1.5}"/>
   <xacro:property name="row" value="0"/>
   <xacro:property name="col" value="0"/>
 
