@@ -92,7 +92,7 @@
   	  rpy="-1.570796326794896 0 -0.7853981633974483"
   	/>
 
-	<transmission name="rim_${name}_${parent_name}_transmission">
+	<!-- <transmission name="rim_${name}_${parent_name}_transmission">
 	  <type>transmission_interface/SimpleTransmission</type>
 	  <joint name="rim_${name}_to_${parent_name}_joint">
 	    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
@@ -101,7 +101,7 @@
 	    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
 	    <mechanicalReduction>1</mechanicalReduction>
 	  </actuator>
-	</transmission>
+	</transmission> -->
 	
   </xacro:macro>
 

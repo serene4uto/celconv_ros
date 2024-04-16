@@ -11,8 +11,8 @@ from ament_index_python.packages import get_package_share_directory
 def generate_launch_description():
 
     declare_box_name = DeclareLaunchArgument(name='box_name', default_value='example_box', description='Name of the box to spawn')
-    declare_x = DeclareLaunchArgument(name='x', default_value='0.173205', description='X position of the box')
-    declare_y = DeclareLaunchArgument(name='y', default_value='-0.1', description='Y position of the box')
+    declare_x = DeclareLaunchArgument(name='x', default_value='0', description='X position of the box')
+    declare_y = DeclareLaunchArgument(name='y', default_value='0', description='Y position of the box')
     declare_z = DeclareLaunchArgument(name='z', default_value='0.2', description='Z position of the box')
 
     box_name = LaunchConfiguration('box_name')

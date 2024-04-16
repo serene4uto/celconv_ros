@@ -3,10 +3,11 @@
   <xacro:include filename="$(find celconv_description)/urdf/celconv_cell.urdf.xacro"/>
 
   <!-- Define the number of rows and columns as input --> 
-  <xacro:arg name="num_rows" default="2"/>
-  <xacro:arg name="num_cols" default="2"/>
-  
+  <xacro:arg name="num_rows" default="1"/>
+  <xacro:arg name="num_cols" default="1"/>
+
   <xacro:arg name="is_sim" default="false"/>
+  <xacro:arg name="cam_fov_h" default="1.3962634"/>
 
   <xacro:arg name="prefix" default=""/>
 
@@ -20,6 +21,9 @@
   <xacro:property name="col_dist" value="${dist_bias + 0.06928 * 1.5}"/>
   <xacro:property name="row" value="0"/>
   <xacro:property name="col" value="0"/>
+
+  <!-- <xacro:property name="pi" value="3.14159265359"/> -->
+
 
   <link name="base_link"></link>
 
@@ -60,6 +64,82 @@
 
   <!-- Start the cell creation process -->
   <xacro:create_cells row="${row}" col="${col}" num_rows="${num_rows}" num_cols="${num_cols}"/>
+
+  <!-- Define the camera -->
+
+  <joint name="camera_joint" type="fixed">
+    <origin xyz="${(num_cols-1) * col_dist * 0.5} ${(num_rows - 1.5) * row_dist * 0.5}  1" rpy="0 1.571 0"/>
+    <parent link="base_link"/>
+    <child link="camera_link"/>        
+  </joint>
+
+  <link name="camera_link">
+    <visual>
+      <origin xyz="-0.03 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.06 0.15 0.15" />
+      </geometry>
+      <material name="white" />
+    </visual>
+    <visual>
+      <origin xyz="0.03 0 0 " rpy="0 ${pi/2} 0"/>
+      <geometry>
+        <cylinder length="0.06" radius="0.04" />
+      </geometry>
+      <material name="blue" >
+        <color rgba="0 0 1 1"/> <!-- RGBA for blue color, fully opaque -->
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.15 0.15 0.12" />
+      </geometry>
+    </collision>
+    <!-- <xacro:inertial_box mass="0.1" x="0.12" y="0.15" z="0.15">
+      <origin xyz="0.0 0 0" rpy="0 0 0"/>
+    </xacro:inertial_box> -->
+  </link>
+
+
+  <joint name="camera_optical_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="-1.571 0 -1.571" />
+    <parent link="camera_link" />
+    <child link="camera_link_optical" />
+  </joint>
+
+  <link name="camera_link_optical"></link>
+
+  <gazebo reference="camera_link">
+    <sensor type="camera" name="celconv_camera">
+      <update_rate>30</update_rate>
+      <visualize>true</visualize>
+      <camera name="cam">
+        <!-- <horizontal_fov>0.6981317</horizontal_fov> -->
+        <!-- <horizontal_fov>1.3962634</horizontal_fov> -->
+        <horizontal_fov>$(arg cam_fov_h)</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+           <near>0.02</near>
+           <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <frame_name>camera_link_optical</frame_name>
+        <min_depth>0.1</min_depth>
+        <max_depth>500</max_depth>
+      </plugin>
+    </sensor>
+  </gazebo>
 
 
   <xacro:if value="$(arg is_sim)">

@@ -1,0 +1,22 @@
+
+<<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="celconv_camera" params="parent_name name xyz rpy">
+    
+    <link name="camera_${name}_${parent_name}_link">
+        <visual>
+          <origin xyz="-0.03 0 0" rpy="0 0 0"/>
+          <geometry>
+            <box size="0.06 0.15 0.15" />
+          </geometry>
+          <material name="white" />
+        </visual>
+
+
+
+    </link>
+  
+  </xacro:macro>
+
+</robot>

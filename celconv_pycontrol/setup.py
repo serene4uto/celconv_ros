@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'simple_control = celconv_pycontrol.simple_control:main',
+            'box_tracking = celconv_pycontrol.box_tracking:main',
         ],
     },
 )

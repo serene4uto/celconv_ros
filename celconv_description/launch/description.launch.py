@@ -6,6 +6,8 @@ from launch_ros.substitutions import FindPackageShare
 from launch_ros.parameter_descriptions import ParameterValue
 from launch.conditions import IfCondition
 
+import sys
+import math
 
 def generate_launch_description():
 
@@ -24,6 +26,22 @@ def generate_launch_description():
     num_rows = LaunchConfiguration('num_rows')
     num_cols = LaunchConfiguration('num_cols')
 
+    nd_num_rows = 0
+    nd_num_cols = 0
+    cam_dist = 1.0
+    for arg in sys.argv:
+        if 'num_rows' in arg:
+            nd_num_rows = int(arg.split(':=')[1])
+        if 'num_cols' in arg:
+            nd_num_cols = int(arg.split(':=')[1])
+    rd = 0.12
+    cd = 0.06928 * 1.5
+    h = 1.5*nd_num_rows*rd
+    w = nd_num_cols*cd
+    fov_h = 2 * math.atan((w / 2) / cam_dist)
+    fov_v = 2 * math.atan((h / 2) / cam_dist)
+    
+
     # Get the URDF file
     celconv_description_content = ParameterValue(
         Command([
@@ -38,6 +56,8 @@ def generate_launch_description():
             'num_cols:=', num_cols,
             ' ',
             'is_sim:=', use_sim_time,
+            ' ',
+            'cam_fov_h:=', '0.83775804'     #str(fov_h),
             ' ',
             'prefix:=', celconv_namespace,
         ]),

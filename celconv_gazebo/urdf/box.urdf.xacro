@@ -2,9 +2,9 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="small_box">
 
   <!-- Define the dimensions as Xacro properties -->
-  <xacro:property name="height" value="0.3"/>
-  <xacro:property name="width" value="0.3"/>
-  <xacro:property name="depth" value="0.1"/> <!-- Assuming depth is the same as width for simplicity -->
+  <xacro:property name="height" value="0.12"/>
+  <xacro:property name="width" value="0.10392"/>
+  <xacro:property name="depth" value="0.05"/> <!-- Assuming depth is the same as width for simplicity -->
 
   <!-- Link for the box -->
   <link name="box_link">
@@ -12,6 +12,9 @@
       <geometry>
         <box size="${width} ${height} ${depth}"/>
       </geometry>
+      <material name="green">
+        <color rgba="0 1 0 1"/> <!-- RGBA for green color, fully opaque -->
+      </material>
     </visual>
     <collision>
       <geometry>
@@ -32,4 +35,7 @@
     </inertial>
   </link>
 
+  <gazebo reference="box_link">
+    <material>Gazebo/Orange</material>
+  </gazebo>
 </robot>
