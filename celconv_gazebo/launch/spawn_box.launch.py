@@ -20,10 +20,21 @@ def generate_launch_description():
     y = LaunchConfiguration('y')
     z = LaunchConfiguration('z')
 
+    # urdf_box_process = ExecuteProcess(
+    #     cmd=[
+    #         'xacro ' + 
+    #         get_package_share_directory('celconv_gazebo') + '/urdf/box.urdf.xacro' +
+    #         ' > ' + 
+    #         get_package_share_directory('celconv_gazebo') + '/urdf/box.urdf'
+    #     ],
+    #     output='screen',
+    #     shell=True
+    # )
+
     urdf_box_process = ExecuteProcess(
         cmd=[
             'xacro ' + 
-            get_package_share_directory('celconv_gazebo') + '/urdf/box.urdf.xacro' +
+            get_package_share_directory('celconv_gazebo') + '/urdf/cardboard_box.urdf.xacro' +
             ' > ' + 
             get_package_share_directory('celconv_gazebo') + '/urdf/box.urdf'
         ],
